@@ -1,13 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: k8s-api-golang
+  name: k8s-api-golang-2
 spec:
+  backoffLimit: 4
   template:
     spec:
       serviceAccountName: k8s-api-job-sa
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: k8s-api-golang
-        image: lmagana92/k8s-api-golang:timeout
-        command: ["/k8s-job/main", "-sleepTime=15"]
+        image: <registry>/k8s-api-golang
+        command: ["/k8s-job/main", "-sleepTime=5"]
       restartPolicy: Never

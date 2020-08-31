@@ -19,8 +19,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"time"
+	"log"
 
 	argoclient "github.com/argoproj/argo/pkg/client/clientset/versioned"
 	argoprojv1alpha1 "github.com/argoproj/argo/pkg/client/clientset/versioned/typed/workflow/v1alpha1"
@@ -29,7 +29,6 @@ import (
 	"github.com/pkg/errors"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
@@ -74,7 +73,9 @@ func NewArgoClientOrFatal(initConnectionTimeout time.Duration) *ArgoClient {
 func main() {
 	// flags
 	var sleepTime int
+	var workflowPath string
 	flag.IntVar(&sleepTime, "sleepTime", 10, "Time in minutes to sleep between the first and second call.")
+	flag.StringVar(&workflowPath, "workflowPath", "/k8s-job/workflows/workflow-one.yaml", "Workflow to run on the workflows folder.")
 	flag.Parse()
 	// creates the in-cluster config
 	config, err := rest.InClusterConfig()
@@ -88,30 +89,25 @@ func main() {
 	}
 	argoClient := NewArgoClientOrFatal(60 * time.Second)
 	namespace := "default"
-	argoClient.Workflow(namespace)
-	worflows, err := argoClient.Workflow(namespace).List(v1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
+	// load workflow
+	workflow := LoadTestWorkflow(workflowPath)
+	for {
+		start := time.Now()
+		_, err := argoClient.Workflow(namespace).Create(workflow)
+		if err != nil {
+			panic(err.Error())
+		}
+		elapsed := time.Since(start)
+		log.Printf("Created new workflow in namespace %s, execution took %s \n", namespace, elapsed)
+		start = time.Now()
+		pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+		if err != nil {
+			panic(err.Error())
+		}
+		elapsed = time.Since(start)
+		log.Printf("There are %d pods in the namespace %s, execution took %s \n", len(pods.Items), namespace, elapsed)
+		// sleep for x minutes
+		log.Printf("Sleeping for %d minutes\n", sleepTime)
+		time.Sleep(time.Duration(sleepTime*60) * time.Second)
 	}
-	fmt.Printf("There are %d workflows in the namespace %s \n", len(worflows.Items), namespace)
-	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("There are %d pods in the namespace %s \n", len(pods.Items), namespace)
-	// sleep for x minutes
-	fmt.Printf("Sleeping for %d minutes\n", sleepTime)
-	time.Sleep(time.Duration(sleepTime*60) * time.Second)
-
-	fmt.Printf("Calling the api a second time \n")
-	worflows, err = argoClient.Workflow(namespace).List(v1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("There are %d workflows in the namespace %s \n", len(worflows.Items), namespace)
-	pods, err = clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("There are %d pods in the namespace %s \n", len(pods.Items), namespace)
 }
