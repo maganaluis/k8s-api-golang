@@ -1,4 +1,4 @@
-FROM golang:1.15.0
+FROM golang:1.13.1
 
 COPY . /k8s-job
 WORKDIR /k8s-job

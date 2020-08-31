@@ -9,5 +9,5 @@ spec:
       containers:
       - name: k8s-api-golang
         image: lmagana92/k8s-api-golang
-        command: ["/k8s-job/main", "-sleepTime=1"]
+        command: ["/k8s-job/main", "-sleepTime=15"]
       restartPolicy: Never
