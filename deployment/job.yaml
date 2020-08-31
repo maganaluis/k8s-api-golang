@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k8s-api-golang
+spec:
+  template:
+    spec:
+      serviceAccountName: k8s-api-job-sa
+      containers:
+      - name: k8s-api-golang
+        image: lmagana92/k8s-api-golang
+        command: ["/k8s-job/main", "-sleepTime=1"]
+      restartPolicy: Never
