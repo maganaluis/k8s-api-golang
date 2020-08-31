@@ -8,6 +8,6 @@ spec:
       serviceAccountName: k8s-api-job-sa
       containers:
       - name: k8s-api-golang
-        image: lmagana92/k8s-api-golang
+        image: lmagana92/k8s-api-golang:timeout
         command: ["/k8s-job/main", "-sleepTime=15"]
       restartPolicy: Never
