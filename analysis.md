@@ -1,6 +1,6 @@
 # Steps to re-create issue
 
-1. Create new Kubernetes cluster with any version above 1.16
+1. Create a new Kubernetes cluster with any version above 1.16
 2. Install Istio version [1.6.8](https://istio.io/latest/news/releases/1.6.x/announcing-1.6.8/)
 3. Enable sidecar injection in the ```default``` namespace.
 ```
@@ -33,7 +33,7 @@ spec:
 ```
 6. Run this job in the ```default``` namespace. 
 
-The result on any Azure AKS cluster will be the on below, on AWS EKS or GCP GKE it will pass. 
+The result on any Azure AKS cluster will be the one below, on AWS EKS or GCP GKE it will pass. 
 
 ```
 2020/09/01 19:25:08 Created new workflow in namespace default, execution took 36.042332ms 
