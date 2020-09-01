@@ -19,6 +19,7 @@ require (
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.8.0
+	github.com/sirupsen/logrus v1.6.0
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
 	google.golang.org/genproto v0.0.0-20190801165951-fa694d86fc64
@@ -30,4 +31,5 @@ require (
 	k8s.io/kubernetes v1.11.1
 	sigs.k8s.io/controller-runtime v0.0.0-20181121180216-5558165425ef
 	sigs.k8s.io/testing_frameworks v0.1.1 // indirect
+	sigs.k8s.io/yaml v1.2.0
 )
