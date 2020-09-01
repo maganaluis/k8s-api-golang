@@ -33,7 +33,7 @@ spec:
 ```
 6. Run this job in the ```default``` namespace. 
 
-The result on any Azure AKS cluster will be the on below, on AWKS EKS or GCP GKE it will pass. 
+The result on any Azure AKS cluster will be the on below, on AWS EKS or GCP GKE it will pass. 
 
 ```
 2020/09/01 19:25:08 Created new workflow in namespace default, execution took 36.042332ms 
